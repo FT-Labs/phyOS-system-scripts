@@ -1,8 +1,6 @@
 #!/bin/sh
 
-if [ ! -z $pOS_NOTIF_IMGS ]; then
-    pOS_NOTIF_IMGS="/usr/share/phyos/notification-imgs/"
-fi
+pOS_NOTIF_IMGS="/usr/share/phyos/notification-imgs/"
 
 
 id=$(xinput list | grep Touchpad | awk '{ print $6}' | cut -d '=' -f 2)
@@ -10,9 +8,9 @@ id=$(xinput list | grep Touchpad | awk '{ print $6}' | cut -d '=' -f 2)
 state=$(xinput list-props $id | grep "Device Enabled" | awk ' {print $4} ')
 
 if [ $state = 1 ]; then
-	dunstify -r 19 -a top-center -i "$pOS_NOTIF_IMGS/touchpad-disabled.png" ""
+	dunstify -r 19 -a center -i "$pOS_NOTIF_IMGS/touchpad-disabled.png" ""
 	xinput set-prop $id "Device Enabled" 0
 else
-	dunstify -r 19 -a top-center -i "$pOS_NOTIF_IMGS/touchpad-enabled.png" ""
+	dunstify -r 19 -a center -i "$pOS_NOTIF_IMGS/touchpad-enabled.png" ""
 	xinput set-prop $id "Device Enabled" 1
 fi
