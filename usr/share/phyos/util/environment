@@ -1,10 +1,10 @@
 # BASE pOS PATH
 
-EDITOR="nvim"
-TERMINAL="st"
-BROWSER="chromium"
-READER="zathura"
-COMPOSITOR="picom" # Added this to toggle compositor from dwm
-QT_QPA_PLATFORMTHEME="qt5ct"	# Have QT use qt5ct theme.
-PATH="$pOS_SCRIPT_PATH/statusbar:$pOS_SCRIPT_PATH/util-scripts"
-_JAVA_AWT_WM_NONREPARENTING=1	# Fix for Java applications in dwm
+EDITOR=nvim
+TERMINAL=st
+BROWSER=chromium
+READER=zathura
+COMPOSITOR=picom
+QT_QPA_PLATFORMTHEME=qt5ct
+PATH="/usr/share/phyos/statusbar:/usr/share/phyos/util-scripts"
+_JAVA_AWT_WM_NONREPARENTING=1
