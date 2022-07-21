@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-path=$HOME/.config/rofi/window-switcher/box.rasi
+path="$pOS_CONFIG_DIR/rofi/window-switcher/box.rasi"
 result="$(xprop -root _NET_CLIENT_LIST)"
 options="\
        -kb-cancel "Alt+Escape,Escape" \

@@ -1,4 +1,5 @@
 # BASE pOS PATH
+pOS_CONFIG_DIR=/usr/share/phyos/config
 
 EDITOR=nvim
 TERMINAL=st
