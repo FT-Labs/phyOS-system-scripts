@@ -32,7 +32,7 @@ rofi_command="rofi -theme $dir/$theme"
 
 # Options
 shutdown=""
-reboot="ﰇ"
+reboot="ﰇ "
 lock=""
 logout="﫼"
 renew_dwm=""
