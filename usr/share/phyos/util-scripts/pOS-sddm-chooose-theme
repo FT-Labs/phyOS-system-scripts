@@ -1,0 +1,14 @@
+#!/bin/bash
+
+vals=( $(ls /usr/share/sddm/themes) )
+declare vals
+
+echo "### This will delete your /etc/sddm.conf file. ###"
+echo "Please choose a number:"
+for ((i=0; i<${#vals[@]}; i++)); do
+    echo "$i:${vals[i]}"
+done
+
+read choice
+
+echo -e "[Theme]\nCurrent=${vals[choice]}" | sudo tee /etc/sddm.conf && echo "Sddm theme: ${vals[choice]} changed succesfully." || "Error occurred changin theme"
