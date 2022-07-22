@@ -40,7 +40,4 @@ printprices() { # Print/format all prices
 case $BLOCK_BUTTON in
 	1) "$TERMINAL" -e "cointop" "$1" ;;
 	2) getprices ;;
-- Middle click to update.
-- Manually add/remove currencies to list in the script." ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
