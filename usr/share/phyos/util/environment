@@ -1,5 +1,6 @@
 # BASE pOS PATH
 pOS_CONFIG_DIR=/usr/share/phyos/config
+pOS_NOTIF_IMG_DIR=/usr/share/phyos/notification-imgs
 
 EDITOR=nvim
 TERMINAL=st
