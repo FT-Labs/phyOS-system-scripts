@@ -5,8 +5,8 @@ cd "$HOME/.cache/phyos/$1"
 dots="/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME"
 
 if [ "$1" == "dwm" ]; then
-    wget "https://github.com/FT-Labs/phyOS-PKGBUILD/tree/master/CORE/phyOS-dwm/PKGBUILD"
-    makepkg -si
+    wget "https://raw.githubusercontent.com/FT-Labs/phyOS-PKGBUILD/master/CORE/phyOS-dwm/PKGBUILD"
+    makepkg -si --noconfirm
     kill -HUP $(pidof -s dwm) && xdotool key Super_L
     rm -rf "$1-phyOS" src pkg *.zst PKGBUILD
 elif [ "$1" == "dots" ] && [ "$2" == "--force" ]; then
