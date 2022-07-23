@@ -22,7 +22,7 @@ do
     fi
 
     case $i in
-        0) dunstify -r 8 -a bottom-center -t 0 -u normal "﫼 LOG OUT" ;;
+        0) dunstify -r 8 -a bottom-center -t 0 -u normal "﫼  LOG OUT" ;;
         1) dunstify -r 8 -a bottom-center -t 0 -u normal "  LOCK" ;;
         2) dunstify -r 8 -a bottom-center -t 0 -u normal "  POWER OFF" ;;
         3) dunstify -r 8 -a bottom-center -t 0 -u normal "ﰇ  REBOOT" ;;
