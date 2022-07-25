@@ -10,17 +10,17 @@
 # full_circle     full_square     full_rounded     full_alt
 # row_circle      row_square      row_rounded      row_alt
 
+
 restart_dwm() {
-    ac=$(printf '0x0%x' $(xdotool getactivewindow))
-    kill -HUP $(pidof -s dwm)
-    (sleep 0.1 && wmctrl -ia $ac) &
+    cur=$(xprop -root _NET_CURRENT_DESKTOP | awk '{print log($3)/log(2)+1}')
+    kill -HUP $(pidof -s dwm) && xdotool key Super_L
+    (sleep 0.1 && xdotool key "Super_L+$cur")
 }
 
 [[ $1 = "restart" ]] && restart_dwm && exit
 
 theme="card_alt"
 dir="$pOS_CONFIG_DIR/rofi/powermenu"
-dunstctl close-all
 pOS-powermenutitle &
 
 # random colors
@@ -56,19 +56,24 @@ options="$logout\n$lock\n$shutdown\n$reboot\n$renew_dwm"
 chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
 case $chosen in
     $logout)
+        killall -9 pOS-powermenutitle && dunstctl close-all
 		kill -TERM $(pidof -s dwm) && xdotool key Super_L ;;
     $lock)
+        killall -9 pOS-powermenutitle && dunstctl close-all
         if pacman -Qq "lightdm" > /dev/null ; then
             dm-tool lock &
         else
             betterlockscreen -l &
         fi ;;
     $shutdown)
+        killall -9 pOS-powermenutitle && dunstctl close-all
 		$ctl poweroff -i ;;
     $reboot)
+        killall -9 pOS-powermenutitle && dunstctl close-all
 		$ctl reboot -i ;;
 	$renew_dwm)
+        killall -9 pOS-powermenutitle && dunstctl close-all
         restart_dwm ;;
+    *)
+        killall -9 pOS-powermenutitle && dunstctl close-all ;;
 esac
-
-killall -9 pOS-powermenutitle && sleep 0.05 && dunstctl close
