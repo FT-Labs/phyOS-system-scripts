@@ -10,6 +10,14 @@
 # full_circle     full_square     full_rounded     full_alt
 # row_circle      row_square      row_rounded      row_alt
 
+restart_dwm() {
+    ac=$(printf '0x0%x' $(xdotool getactivewindow))
+    kill -HUP $(pidof -s dwm)
+    (sleep 0.1 && wmctrl -ia $ac) &
+}
+
+[[ $1 = "restart" ]] && restart_dwm && exit
+
 theme="card_alt"
 dir="$pOS_CONFIG_DIR/rofi/powermenu"
 dunstctl close-all
@@ -60,9 +68,7 @@ case $chosen in
     $reboot)
 		$ctl reboot -i ;;
 	$renew_dwm)
-        ac=$(printf '0x0%x' $(xdotool getactivewindow))
-        kill -HUP $(pidof -s dwm)
-        (sleep 0.1 && wmctrl -ia $ac) & ;;
+        restart_dwm ;;
 esac
 
 killall -9 pOS-powermenutitle && sleep 0.05 && dunstctl close
