@@ -63,7 +63,9 @@ multimon() { # Multi-monitor handler.
 	esac ;}
 
 onescreen() { # If only one output available or chosen.
-	xrandr --output "$1" --auto --scale 1.0x1.0 $(echo "$allposs" | grep -v "$1" | awk '{print "--output", $1, "--off"}' | paste -sd ' ')
+        chosenres=$(xrandr -q | awk '{print $1}' | grep "x" | rofi -dmenu -i -p "Choose your resolution:")
+        primaryrate=$(xrandr -q | tr -d "+" | sed "/connected/d;/current/d" | grep $chosenres | sed -e "s/[^ ]*x[^ ]*//ig" | sed 's/^ *//g' | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$1':")
+        xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate"
 	}
 
 postrun() { # Stuff to run to clean up.
@@ -80,7 +82,7 @@ screens=$(echo "$allposs" | awk '/ connected/ {print $1}')
 
 # If there's only one screen
 [ "$(echo "$screens" | wc -l)" -lt 2 ] &&
-	{ onescreen "$screens"; postrun; dunstify -a top-center "💻 Only one screen detected." "Using it in its optimal settings...";  exit ;}
+	{ onescreen "$screens"; postrun; exit ;}
 
 # Get user choice including multi-monitor and manual selection:
 chosen=$(printf "%s\\nMulti-Monitor\\nManual Selection" "$screens" | rofi -dmenu -i -p "Select display arangement:") &&
