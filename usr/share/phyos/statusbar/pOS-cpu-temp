@@ -21,4 +21,4 @@ case 1 in
                           *) status="" ;;
  esac
 
- echo "$status $temp °C"
+ echo "$status$temp°C"
