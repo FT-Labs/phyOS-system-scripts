@@ -6,6 +6,7 @@ EDITOR=nvim
 TERMINAL=st
 BROWSER=chromium
 READER=zathura
+FILE_BROWSER=thunar
 COMPOSITOR=picom
 QT_QPA_PLATFORMTHEME=qt5ct
 PATH="/usr/share/phyos/statusbar:/usr/share/phyos/util-scripts"

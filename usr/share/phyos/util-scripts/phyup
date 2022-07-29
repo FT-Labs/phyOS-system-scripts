@@ -10,6 +10,7 @@ if [ "$1" == "dwm" ]; then
     kill -HUP $(pidof -s dwm) && xdotool key Super_L
     rm -rf "$1-phyOS" src pkg *.zst PKGBUILD
 elif [ "$1" == "dots" ] && [ "$2" == "--force" ]; then
+        yes | rm -r ~/.cfg
         git clone "https://github.com/FT-Labs/dotfiles" && mv dotfiles/.git "$HOME/.cfg" && cp -r dotfiles/.* "$HOME/" || rm -rf dotfiles
         $dots config --local status.showUntrackedFiles no
 elif [ "$1" == "dots" ]; then

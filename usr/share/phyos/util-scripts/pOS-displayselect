@@ -65,7 +65,14 @@ multimon() { # Multi-monitor handler.
 onescreen() { # If only one output available or chosen.
         chosenres=$(xrandr -q | awk '{print $1}' | grep "x" | rofi -dmenu -i -p "Choose your resolution:")
         primaryrate=$(xrandr -q | tr -d "+" | sed "/connected/d;/current/d" | grep $chosenres | sed -e "s/[^ ]*x[^ ]*//ig" | sed 's/^ *//g' | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$1':")
-        xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate"
+        is_scale=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set dynamic scale? :")
+        if [ $is_scale = "Yes" ]; then
+            res=$(echo $chosenres | sed "s/x/\ /g" | awk '{print $1}')
+            scale=$(bc -l <<< "2560/$res")
+            xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale $scale
+        else
+            xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale 1.0x1.0
+        fi
 	}
 
 postrun() { # Stuff to run to clean up.

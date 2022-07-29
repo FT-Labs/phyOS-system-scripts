@@ -1,7 +1,7 @@
 configuration {
     font:                    "Consolas 16";
     show-icons:              true;
-    icon-theme:              "Papirus";
+    icon-theme:              "Papirus-Dark";
     disable-history:         true;
     fullscreen:              false;
     hide-scrollbar:          true;
