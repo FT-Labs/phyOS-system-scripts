@@ -24,11 +24,11 @@ vol="$(pamixer --get-volume)"
 [ $(pamixer --get-mute) = true ] && send_notification && echo ﱝ && exit
 
 if [ "$vol" -gt "70" ]; then
-	icon="🔊"
+	icon=""
 elif [ "$vol" -lt "30" ]; then
-	icon="🔈"
+	icon="奄"
 else
-	icon="🔉"
+	icon="墳"
 fi
 
-send_notification && echo "$icon  $vol%"
+send_notification && echo "$icon $vol%"

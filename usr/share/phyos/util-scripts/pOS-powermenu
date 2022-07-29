@@ -77,4 +77,3 @@ case $chosen in
     *)
         killall -9 pOS-powermenutitle && dunstctl close-all ;;
 esac
-dunsctl close-all

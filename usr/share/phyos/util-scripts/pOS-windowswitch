@@ -16,19 +16,19 @@ do
     fi
 done
 if [[ $no_of_window = 1 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 11 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 11 $options &
 elif [[ $no_of_window = 2 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 20 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 20 $options &
 elif [[ $no_of_window = 3 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 29 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 29 $options &
 elif [[ $no_of_window = 4 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 37 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 37 $options &
 elif [[ $no_of_window = 5 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 45 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 45 $options &
 elif [[ $no_of_window = 6 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 55 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 55 $options &
 elif [[ $no_of_window = 7 ]]; then
-    rofi -no-lazy-grab -show window -icon-theme "Infinity_Dark_Icons" -theme $path -width 64 $options &
+    rofi -no-lazy-grab -show window -icon-theme "Papirus-Dark" -theme $path -width 64 $options &
 else
  rofi -show window -theme $path -width 72 $options
 fi
