@@ -27,4 +27,5 @@ case $BLOCK_BUTTON in
 	3) notify-send TODAY $today ;;
 esac
 
-date "$icon +%H:%M"
+time=$(date "+%H:%M")
+echo "$icon $time"
