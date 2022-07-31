@@ -75,7 +75,7 @@ onescreen() { # If only one output available or chosen.
             [ $save_config = "Yes" ] && printf "xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale $scale" >> "$HOME"/.xsync
         else
             xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale 1.0x1.0
-            [ $save_config = "Yes" ] && printf "xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale 10x1.0" >> "$HOME"/.xsync
+            [ $save_config = "Yes" ] && printf "xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale 1.0x1.0" >> "$HOME"/.xsync
         fi
 	}
 
