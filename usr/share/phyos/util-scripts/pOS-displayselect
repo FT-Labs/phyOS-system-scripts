@@ -10,10 +10,10 @@ te() {
 
 twoscreen() { # If multi-monitor is selected and there are two screens.
 
-    mirror=$(printf "no\\nyes" | rofi -dmenu -i -p "Mirror displays?")
+    mirror=$(printf "No\\nYes" | rofi -dmenu -i -p "Mirror displays?")
     # Mirror displays using native resolution of external display and a scaled
     # version for the internal display
-    if [ "$mirror" = "yes" ]; then
+    if [ "$mirror" = "Yes" ]; then
         external=$(echo "$screens" | rofi -dmenu -i -p "Optimize resolution for:")
         internal=$(echo "$screens" | grep -v "$external")
 
@@ -34,16 +34,14 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
             --output "$internal" --auto --same-as "$external" \
             --scale "$scale_x"x"$scale_y"
     else
-
         primary=$(echo "$screens" | rofi -dmenu -i -p "Select primary display:")
         te $primary
-		primaryrate=$(xrandr -q | tr -d "+" | sed -n "/$primary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$primary':")
+		primaryrate=$(xrandr -q | tr -d "*+" | sed -n "/$primary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$primary':")
         te $primaryrate
 		primaryres=$(xrandr -q | sed -n "/$primary/{n;p;}" | awk '{ print $1 }')
-        te $primaryres
         secondary=$(echo "$screens" | grep -v "$primary")
 		secondaryres=$(xrandr -q | sed -n "/$secondary/{n;p;}" | awk '{ print $1 }')
-		secondaryrate=$(xrandr -q | tr -d "+" | sed -n "/$secondary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$secondary':")
+		secondaryrate=$(xrandr -q | tr -d "*+" | sed -n "/$secondary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$secondary':")
         te $secondaryrate
         direction=$(printf "left\\nright\\nabove" | rofi -dmenu -i -p "What side of $primary should $secondary be on?")
         te $direction
