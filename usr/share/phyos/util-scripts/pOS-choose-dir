@@ -1,0 +1,5 @@
+#!/bin/bash
+
+chosen=$(ls "$ZSHCFG/bookmarks/" | rofi -dmenu -i "Choose directory to jump:")
+
+[ ! -z $chosen ] && cd -P $chosen && st & disown

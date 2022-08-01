@@ -4,6 +4,10 @@
 # displays and lets user select one to use. User may also select "manual
 # selection" which opens arandr.
 
+te() {
+    [ -z $1 ] && exit
+}
+
 twoscreen() { # If multi-monitor is selected and there are two screens.
 
     mirror=$(printf "no\\nyes" | rofi -dmenu -i -p "Mirror displays?")
@@ -32,13 +36,22 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
     else
 
         primary=$(echo "$screens" | rofi -dmenu -i -p "Select primary display:")
+        te $primary
 		primaryrate=$(xrandr -q | tr -d "+" | sed -n "/$primary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$primary':")
+        te $primaryrate
 		primaryres=$(xrandr -q | sed -n "/$primary/{n;p;}" | awk '{ print $1 }')
+        te $primaryres
         secondary=$(echo "$screens" | grep -v "$primary")
 		secondaryres=$(xrandr -q | sed -n "/$secondary/{n;p;}" | awk '{ print $1 }')
 		secondaryrate=$(xrandr -q | tr -d "+" | sed -n "/$secondary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$secondary':")
+        te $secondaryrate
         direction=$(printf "left\\nright\\nabove" | rofi -dmenu -i -p "What side of $primary should $secondary be on?")
+        te $direction
+        save_config=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set configuration as permanent?")
+        te $save_config
+        [ $save_config = "Yes" ] && printf "#!/bin/bash\n" > "$HOME/.xsync" && chmod +x "$HOME/.xsync"
         xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0
+        printf "xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0" >> "$HOME/.xsync"
     fi
     }
 
@@ -64,9 +77,13 @@ multimon() { # Multi-monitor handler.
 
 onescreen() { # If only one output available or chosen.
         chosenres=$(xrandr -q | awk '{print $1}' | grep "x" | rofi -dmenu -i -p "Choose your resolution:")
+        te $chosenres
         primaryrate=$(xrandr -q | tr -d "+*" | sed "/connected/d;/current/d" | grep $chosenres | sed -e "s/[^ ]*x[^ ]*//ig" | sed 's/^ *//g' | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$1':")
+        te $primaryrate
         is_scale=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set dynamic scale? :")
+        te $is_scale
         save_config=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set configuration as permanent?")
+        te $save_config
         [ $save_config = "Yes" ] && printf "#!/bin/bash\n" > "$HOME/.xsync" && chmod +x "$HOME/.xsync"
         if [ $is_scale = "Yes" ]; then
             res=$(echo $chosenres | sed "s/x/\ /g" | awk '{print $1}')
