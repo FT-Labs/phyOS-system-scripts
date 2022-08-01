@@ -1,5 +1,6 @@
 #!/bin/bash
 
-chosen=$(ls "$ZSHCFG/bookmarks/" | rofi -dmenu -i "Choose directory to jump:")
+chosen=$(ls "$HOME/.config/zsh/zshcfg/bookmarks/" | rofi -dmenu -i "Choose directory to jump:")
 
-[ ! -z $chosen ] && cd -P $chosen && $TERMINAL & disown
+export BM_DIR="$chosen"
+[ ! -z $chosen ] && $TERMINAL & disown
