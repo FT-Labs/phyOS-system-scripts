@@ -9,7 +9,7 @@ elif [[ $1 = "rm" ]]; then
 	rm "$ZSHCFG/bookmarks/$2"
 	echo "Bookmark: $2 erased succesfully"
 elif [[ $1 = "clear" ]]; then
-    yes | rm -r "$ZSHCFG/bookmarks/*"
+    yes | rm -r $ZSHCFG/bookmarks/*
     echo "Bookmarks cleared succesfully"
 else
 	echo "Wrong operation, please use one of below:"
