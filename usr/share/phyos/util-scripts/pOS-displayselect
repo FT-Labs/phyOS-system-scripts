@@ -18,8 +18,8 @@ calc_scale() {
         x_dim=$(xrandr -q | awk '/ connected primary/ {print $(NF-2)-0}')
         y_dim=$(xrandr -q | awk '/ connected primary/ {print $NF-0}')
     fi
-    x_dpi=$(bc -l <<< (x_res/(x_dim/2.54)))
-    y_dpi=$(bc -l <<< (y_res/(y_dim/2.54)))
+    # x_dpi=$(bc -l <<< (x_res/(x_dim/2.54))) # Dpi calc will be done later
+    # y_dpi=$(bc -l <<< (y_res/(y_dim/2.54)))
     x_scale=$(bc -l <<< "(2560/$x_res)")
     y_scale=$(bc -l <<< "(1440/$y_res)")
 }
