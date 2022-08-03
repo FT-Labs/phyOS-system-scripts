@@ -17,9 +17,9 @@ getmount() { \
 	}
 
 mountusb() { \
-	chosen="$(echo "$usbdrives" | rofi -dmenu -i -p "Mount which drive?")" || exit 1
+	chosen="$(echo "$usbdrives" | rofi -dmenu -i -p " Mount which drive?")" || exit 1
 	chosen="$(echo "$chosen" | awk '{print $1}')"
-	sudo -A mount "$chosen" 2>/dev/null && notify-send "💻 USB mounting" "$chosen mounted." && exit 0
+	sudo -A mount "$chosen" 2>/dev/null && notify-send "禍 USB mounting" "$chosen mounted." && exit 0
 	alreadymounted=$(lsblk -nrpo "name,type,mountpoint" | awk '$3!~/\/boot|\/home$|SWAP/&&length($3)>1{printf "-not ( -path *%s -prune ) ",$3}')
 	getmount "/mnt /media /mount /home -maxdepth 5 -type d $alreadymounted"
 	partitiontype="$(lsblk -no "fstype" "$chosen")"
@@ -28,7 +28,7 @@ mountusb() { \
 		"exfat") sudo -A mount "$chosen" "$mp" -o uid="$(id -u)",gid="$(id -g)";;
 		*) sudo -A mount "$chosen" "$mp"; user="$(whoami)"; ug="$(groups | awk '{print $1}')"; sudo -A chown "$user":"$ug" "$mp";;
 	esac
-	notify-send "💻 USB mounting" "$chosen mounted to $mp."
+	notify-send "禍 USB mounting" "$chosen mounted to $mp."
 	}
 
 mountandroid() { \
