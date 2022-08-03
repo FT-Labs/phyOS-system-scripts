@@ -8,6 +8,22 @@ te() {
     [ -z $1 ] && exit
 }
 
+calc_scale() {
+    x_res=$(echo $1 | tr -s "x" " "  | awk '{print $1}')
+    y_res=$(echo $1 | tr -s "x" " " | awk '{print $NF}')
+    if [ -z $2 ]; then
+        x_dim=$(xrandr -q | awk '/ connected [0-9]/ {print $(NF-2)-0}')
+        y_dim=$(xrandr -q | awk '/ connected [0-9]/ {print $NF-0}')
+    else
+        x_dim=$(xrandr -q | awk '/ connected primary/ {print $(NF-2)-0}')
+        y_dim=$(xrandr -q | awk '/ connected primary/ {print $NF-0}')
+    fi
+    x_dpi=$(bc -l <<< (x_res/(x_dim/2.54)))
+    y_dpi=$(bc -l <<< (y_res/(y_dim/2.54)))
+    x_scale=$(bc -l <<< "(2560/$x_res)")
+    y_scale=$(bc -l <<< "(1440/$y_res)")
+}
+
 twoscreen() { # If multi-monitor is selected and there are two screens.
 
     mirror=$(printf "No\\nYes" | rofi -dmenu -i -p "Mirror displays?")
@@ -37,19 +53,34 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
         primary=$(echo "$screens" | rofi -dmenu -i -p "Select primary display:")
         te $primary
 		primaryrate=$(xrandr -q | tr -d "*+" | sed -n "/$primary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$primary':")
+        echo $primaryrate
         te $primaryrate
 		primaryres=$(xrandr -q | sed -n "/$primary/{n;p;}" | awk '{ print $1 }')
+        calc_scale $primaryres primary
+        p_scale_x=$x_scale
+        p_scale_y=$y_scale
         secondary=$(echo "$screens" | grep -v "$primary")
 		secondaryres=$(xrandr -q | sed -n "/$secondary/{n;p;}" | awk '{ print $1 }')
 		secondaryrate=$(xrandr -q | tr -d "*+" | sed -n "/$secondary/{n;p;}" | cut -d ' ' -f 9- | tr -s " " "\n" | rofi -dmenu -i -p "Set refresh rate for '$secondary':")
         te $secondaryrate
+        calc_scale $secondaryres
+        s_scale_x=$x_scale
+        s_scale_y=$y_scale
         direction=$(printf "left\\nright\\nabove" | rofi -dmenu -i -p "What side of $primary should $secondary be on?")
         te $direction
+        is_scale=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set dynamic scale? :")
+        te $is_scale
         save_config=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set configuration as permanent?")
         te $save_config
         [ $save_config = "Yes" ] && printf "#!/bin/bash\n" > "$HOME/.xsync" && chmod +x "$HOME/.xsync"
-        xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0
-        printf "xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0" >> "$HOME/.xsync"
+
+        if [ $is_scale = "Yes" ]; then
+            xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale "${p_scale_x}x${p_scale_y}" --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale "${s_scale_x}x${s_scale_y}"
+            printf "xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale "${p_scale_x}x${p_scale_y}" --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale "${s_scale_x}x${s_scale_y}"" >> "$HOME/.xsync"
+        else
+            xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0
+            printf "xrandr --output "$primary" --rate "$primaryrate" --mode "$primaryres" --scale 1.0x1.0 --output "$secondary" --"$direction"-of "$primary" --rate "$secondaryrate" --mode "$secondaryres" --scale 1.0x1.0" >> "$HOME/.xsync"
+        fi
     fi
     }
 
@@ -84,12 +115,7 @@ onescreen() { # If only one output available or chosen.
         te $save_config
         [ $save_config = "Yes" ] && printf "#!/bin/bash\n" > "$HOME/.xsync" && chmod +x "$HOME/.xsync"
         if [ $is_scale = "Yes" ]; then
-            x_res=$(echo $chosenres | sed "s/x/\ /g" | awk '{print $1}')
-            y_res=$(echo $chosenres | sed "s/x/\ /g" | awk '{print $NF}')
-            x_dim=$(xrandr -q | awk '/ connected/ {print $(NF-2)-0}')
-            y_dim=$(xrandr -q | awk '/ connected/ {print $NF-0}')
-            x_scale=$(bc -l <<< "(2560/$x_res)*($x_dim/344)")
-            y_scale=$(bc -l <<< "(1440/$y_res)*($y_dim/193)")
+            calc_scale $chosenres
             xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale "${x_scale}x${y_scale}"
             [ $save_config = "Yes" ] && printf "xrandr --output "$1" --mode "$chosenres" --rate "$primaryrate" --scale "${x_scale}x${y_scale}"" >> "$HOME"/.xsync
         else
