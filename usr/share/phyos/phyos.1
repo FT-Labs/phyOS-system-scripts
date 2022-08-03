@@ -1,0 +1,70 @@
+.TH phyOS 1 phyOS\-1.0.4\-beta
+.SH NAME
+phyOS \- Usage Guide and Scripts
+.SH SYNOPSIS
+.B phyOS
+.SH DESCRIPTION
+Useful scripts & system wide settings guide
+.P
+.SH CUSTOMIZATION SCRIPTS
+.SS bm
+.TP
+.B Bookmark directories & navigate through them either from terminal or Win+d button combination
+.TP
+.B bm add ${DIR} @Aliasname
+.TP
+.B E.g: bm add ./Desktop @Desktop will add a bookmark as @Desktop.
+Usage: jmp @Desktop from terminal, or Win+d then choose from rofi.
+.TP
+.B bm rm @Aliasname [Removes bookmark]
+.TP
+.B bm clear [Removes all bookmarks]
+.SS pOS-setbg ${img_path}
+.TP
+.B Set wallpaper
+Set wallpaper according to ${img_path}, also update lock screen. If ${img_path} is not valid or empty, sets default wallpaper.
+.SS pOS-make-bar
+.TP
+.B Make your own status bar
+Write space seperated integers from available blocks [e.g: 0 1 3 2] to customize your status bar blocks.
+.SS pOS-sddm-choose-theme
+.TP
+.B Choose from available sddm themes
+Select a number from available sddm themes to apply. Install more themes with pacman, available packages are below.
+.ce 1
+ [Available themes in phyOS-repo]
+ 1 - phyOS-sddm-simplicity-theme
+ 2 - phyOS-sddm-ittu-theme
+.SS pOS-grub-choose-theme
+.TP
+.B Choose from available grub themes
+Select a number from available grub themes to apply. Install more themes with pacman, available packages are below.
+.ce 1
+ [Available themes in phyOS-repo]
+ 1 - phyOS-grub-xenlism-theme
+ 2 - phyOS-grub-darkmatter-theme
+.SH SYSTEM RELATED SCRIPTS
+.SS phyOS-grub-conf
+.TP
+.B Run this script to update your grub into latest version if you have installed an older version of iso.
+.SS phyOS-update-kernel-conf
+.TP
+.B Run this script to update your kernel & initramfs configuration if you have installed an older version of iso.
+ If you have issues on boot, this will add a new kernel which early graphics (KMS) are disabled.
+.SS phyOS-update-mirrors
+.TP
+.B Run this script to update your mirrors to faster ones.
+.SS phyup
+.TP
+.B Update dotfiles - dwm script.
+.TP
+.B phyup dots --force
+ Force update dotfiles to newest update. (This will override your custom changes)
+.TP
+.B phyup dots
+ Update dotfiles to newest update, if there is no conflict this won't touch custom changes on dotfiles.
+.TP
+.B phyup dwm
+ Compile & build phyOS-dwm package locally.
+ If you want to set custom keybindings, copy "$HOME/.config/phyos/dwm/keys.h.backup" to "$HOME/.config/phyos/dwm/keys.h".
+ Then make your changes on "keys.h" file. After that, run this script to update your keybindings.
