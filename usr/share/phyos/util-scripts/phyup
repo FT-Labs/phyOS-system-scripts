@@ -13,11 +13,17 @@ elif [ "$1" == "dots" ] && [ "$2" == "--force" ]; then
         yes | rm -r ~/.cfg
         git clone "https://github.com/FT-Labs/dotfiles" && mv dotfiles/.git "$HOME/.cfg" && cp -r dotfiles/.* "$HOME/" || rm -rf dotfiles
         $dots config --local status.showUntrackedFiles no
+        $dots checkout -b local
 elif [ "$1" == "dots" ]; then
     if [[ -d "$HOME/.cfg" ]]; then
-        $dots pull
+        $dots pull origin master
+        $dots checkout local
+        $dots add -u
+        $dots commit -m "local"
+        $dots merge master
     else
         git clone "https://github.com/FT-Labs/dotfiles" && mv dotfiles/.git "$HOME/.cfg" && cp -r dotfiles/.* "$HOME/" || rm -rf dotfiles
         $dots config --local status.showUntrackedFiles no
+        $dots checkout -b local
     fi
 fi
