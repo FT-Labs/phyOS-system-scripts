@@ -5,7 +5,7 @@ do
 	capacity=$(cat "$battery"/capacity 2>/dev/null) || break
 	status=$(sed "s/[Dd]ischarging/DC/;s/[Nn]ot charging//;s/[Cc]harging/C/;s/[Uu]nknown//;s/[Ff]ull//" "$battery"/status)
 
-    if [ -f /tmp/acstat ]; then
+	if [ -f /tmp/acstat ] && [ $(find /tmp/acstat -mmin 0.02) ] && [ $(cat /tmp/acstat) = "1" ]; then
         dunstify -a center --timeout=1500 -i "$pOS_NOTIF_IMG_DIR/battery-charge.png" ""
     fi
 
