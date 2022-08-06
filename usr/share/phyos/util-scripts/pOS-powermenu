@@ -54,26 +54,21 @@ esac
 options="$logout\n$lock\n$shutdown\n$reboot\n$renew_dwm"
 
 chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
+xset r rate 250 40
+killall -9 pOS-powermenutitle && dunstctl close-all
 case $chosen in
     $logout)
-        killall -9 pOS-powermenutitle && dunstctl close-all
 		kill -TERM $(pidof -s dwm) && xdotool key Super_L ;;
     $lock)
-        killall -9 pOS-powermenutitle && dunstctl close-all
         if pacman -Qq "lightdm" > /dev/null ; then
             dm-tool lock &
         else
             betterlockscreen -l &
         fi ;;
     $shutdown)
-        killall -9 pOS-powermenutitle && dunstctl close-all
 		$ctl poweroff -i ;;
     $reboot)
-        killall -9 pOS-powermenutitle && dunstctl close-all
 		$ctl reboot -i ;;
 	$renew_dwm)
-        killall -9 pOS-powermenutitle && dunstctl close-all
         restart_dwm ;;
-    *)
-        killall -9 pOS-powermenutitle && dunstctl close-all ;;
 esac
