@@ -20,8 +20,16 @@ calc_scale() {
     fi
     # x_dpi=$(bc -l <<< (x_res/(x_dim/2.54))) # Dpi calc will be done later
     # y_dpi=$(bc -l <<< (y_res/(y_dim/2.54)))
-    x_scale=$(bc -l <<< "(2560/$x_res)")
-    y_scale=$(bc -l <<< "(1440/$y_res)")
+    if [ $is_scale = "Yes" ]; then
+        sel=$(printf "2560\n1920\n1680\n" | rofi -dmenu -i -p "Scale resolution to (Try lower if ui is too small):")
+        te $sel
+        x_scale=$(bc -l <<< "($sel/$x_res)")
+        if [ $sel = "2560" ]; then
+            y_scale=$(bc -l <<< "(2560/$y_res)")
+        else
+            y_scale=$(bc -l <<< "(1080/$y_res)")
+        fi
+    fi
 }
 
 twoscreen() { # If multi-monitor is selected and there are two screens.
@@ -56,6 +64,7 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
         echo $primaryrate
         te $primaryrate
 		primaryres=$(xrandr -q | sed -n "/$primary/{n;p;}" | awk '{ print $1 }')
+        is_scale=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set dynamic scale? :")
         calc_scale $primaryres primary
         p_scale_x=$x_scale
         p_scale_y=$y_scale
@@ -68,8 +77,6 @@ twoscreen() { # If multi-monitor is selected and there are two screens.
         s_scale_y=$y_scale
         direction=$(printf "left\\nright\\nabove" | rofi -dmenu -i -p "What side of $primary should $secondary be on?")
         te $direction
-        is_scale=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set dynamic scale? :")
-        te $is_scale
         save_config=$(printf "Yes\nNo" | rofi -dmenu -i -p "Set configuration as permanent?")
         te $save_config
         [ $save_config = "Yes" ] && printf "#!/bin/bash\n" > "$HOME/.xsync" && chmod +x "$HOME/.xsync"
