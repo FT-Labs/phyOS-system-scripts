@@ -1,10 +1,12 @@
 #!/bin/sh
 
-# Prints the current volume or 🔇 if muted.
-
-
 case $BLOCK_BUTTON in
-	1) setsid -f "$TERMINAL" -e pulsemixer ;;
+    	1)
+            if ! pacman -Qq pavucontrol > /dev/null; then
+                dunstify -a top-center "Pavucontrol package missing. Please install with pacman"
+                exit
+            fi
+            setsid -f pavucontrol ;;
 esac
 
 function send_notification {
