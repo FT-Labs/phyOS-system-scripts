@@ -1,0 +1,113 @@
+#!/bin/bash
+
+# class title instance   tagsmask    isfloating   isterminal  iscentered  noswallow  managedsize monitor
+
+header=$(cat <<-EOF
+########################################################################################################################
+#An example to put values manually:
+########################################################################################################################
+#class    instance        title          tagsmask    isfloating   isterminal  iscentered  noswallow  managedsize  monitor
+#=======================================================================================================================
+#{ EXAMPLE,  Discord,     0,            0,            0,           1,         0,         0,         0,         -1 }
+########################################################################################################################
+EOF
+)
+
+abort() {
+    tput setaf 9
+    echo "Invalid input. Aborting..."
+    exit
+}
+
+readbin() {
+    tput sgr0
+    read n
+    [[ -z $n ]] && n=0
+
+    if [[ $n = "1" ]] || [[ $n = "0" ]]; then
+        return
+    fi
+    abort
+}
+
+echo "#####################################################"
+echo "Click a window to select an application to configure"
+echo "#####################################################"
+echo "Use this script to set your application preferences"
+echo "If selected window is existent, it will be replaced"
+echo "All outputs are stored in '~/.phypin'"
+echo "#####################################################"
+
+parse=$(xprop | grep "WM_CLASS")
+class=$(echo $parse | awk '{print $NF}' | tr -d '",')
+instance=$(echo $parse | awk '{print $(NF-1)}' | tr -d '",')
+[[ -z $class ]] && class=0
+[[ -z $instance ]] && instance=0
+title=0
+tagsmask=0
+isfloating=0
+isterminal=0
+iscentered=0
+noswallow=0
+managedsize=0
+monitor=-1
+
+tput setaf 40
+#echo "Set application to force open at specific tag? (1..9)"
+#echo "Below is the list of properties you can set for your application"
+echo "tagsmask: Input a number between 1-9 to force open it in the given tag number."
+tput setaf 39
+echo "Press enter to use default option... (open in current tag)"
+tput sgr0
+read n
+[[ -z $n ]] && n=0
+if (( ${#n} != 1 )) || (( n < 0 )) || (( n > 9 )); then
+    abort
+fi
+tagsmask=$n
+
+tput setaf 40
+echo
+echo "isfloating: Input '1' to open your application in floating mode."
+tput setaf 39
+echo "Press enter to use default option... (non-floating window)"
+readbin
+isfloating=$n
+
+tput setaf 40
+echo
+echo "isterminal: Input '1' to run application in terminal."
+tput setaf 39
+echo "Press enter to use default option... (non-terminal application)"
+readbin
+isterminal=$n
+
+tput setaf 40
+echo
+echo "iscentered: Input '1' to position the application in the center of the screen."
+echo "Beware! This forces the application to run in floating mode!"
+tput setaf 39
+echo "Press enter to use default option... (non-centered)"
+readbin
+iscentered=$n
+
+tput setaf 40
+echo
+echo "noswallow: Input '1' to prevent the application from swallowing."
+tput setaf 39
+echo "Press enter to use default option... (allow swallowing)"
+readbin
+noswallow=$n
+
+tput setaf 40
+echo "managedsize: Input '1' to allow dwm to set window size. Useful for floating windows if the base size is not sufficient."
+tput setaf 39
+echo "Press enter to use default option... (use default size of application)"
+readbin
+managedsize=$n
+
+
+[[ ! -f "$HOME/.phypin" ]] && printf "$header\n" > "$HOME/.phypin"
+sed -i "/$class/d;/$instance/d" "$HOME/.phypin"
+printf "$class $instance $title $tagsmask $isfloating $isterminal $iscentered $noswallow $managedsize $monitor\n" >> "$HOME/.phypin"
+pOS-powermenu restart

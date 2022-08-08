@@ -27,6 +27,16 @@ Set wallpaper according to ${img_path}, also update lock screen. If ${img_path} 
 .TP
 .B Make your own status bar
 Write space seperated integers from available blocks [e.g: 0 1 3 2] to customize your status bar blocks.
+.SS pOS-pin
+.TP
+.B Set application preferences
+This script helps you to select preferences for applications. For example open discord on tag 9, force thunar in center of screen.
+ tagmask: Spawn window on chosen tag (1 - 9)
+ isfloating: Sets window to floating mode
+ isterminal: Open application in terminal (use this for tui applications)
+ iscentered: Forces window to center of screen (useful for dialog boxes, forces floating mode)
+ noswallow: Dont swallow window
+ managedsize: Allow dwm to change windows size (use this if floating mode window is small)
 .SS pOS-sddm-choose-theme
 .TP
 .B Choose from available sddm themes

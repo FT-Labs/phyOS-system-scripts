@@ -98,7 +98,7 @@ element {
 }
 
 element-icon {
-    size: 100px;
+    size: 50px;
     border: 0px;
 }
 
