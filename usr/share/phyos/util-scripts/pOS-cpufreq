@@ -1,0 +1,18 @@
+#!/bin/sh
+
+contains () {
+    [[ $2 =~ (^|[[:space:]])$1($|[[:space:]]) ]] && echo 1 || echo 0
+}
+
+# valid="conservative ondemand userspace powersave performance schedutil"
+valid="$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors)"
+
+if [ $# -gt 0 ] && [ $(contains "$1" "$valid") -eq 1 ] ; then
+    echo $1 | tee /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
+else
+    echo "Invalid option"
+    echo "Valid options are:"
+    echo $valid
+    echo "Current setting is:"
+    cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+fi
