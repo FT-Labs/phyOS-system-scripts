@@ -16,7 +16,7 @@ elif [ "$1" == "dots" ] && [ "$2" == "--force" ]; then
         $dots checkout -b local
 elif [ "$1" == "dots" ]; then
     if [[ -d "$HOME/.cfg" ]]; then
-        $dots pull origin master
+        $dots pull origin master --rebase
         $dots checkout local
         $dots add -u
         $dots commit -m "local"

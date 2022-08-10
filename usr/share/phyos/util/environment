@@ -2,6 +2,7 @@
 pOS_CONFIG_DIR=/usr/share/phyos/config
 pOS_NOTIF_IMG_DIR=/usr/share/phyos/notification-imgs
 
+nvim=vim
 EDITOR=nvim
 TERMINAL=st
 BROWSER=chromium
