@@ -87,8 +87,6 @@ confirm_exit() {
 # Variable passed to rofi
 options="$logout\n$lock\n$shutdown\n$reboot\n$renew_dwm"
 
-confirm_exit
-
 if [[ $theme = "default" ]]; then
     chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
 else
