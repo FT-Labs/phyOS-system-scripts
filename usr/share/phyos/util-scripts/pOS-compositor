@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $COMPOSITOR = "picom" ]]; then
+    [[ -f "$HOME/.config/phyos/phyos.conf" ]] && source "$HOME/.config/phyos/phyos.conf"
+    if [[ $PICOM_EXPERIMENTAL = "true" ]]; then
+        $COMPOSITOR --experimental-backends --backend glx
+    else
+        $COMPOSITOR
+    fi
+else
+    $COMPOSITOR
+fi

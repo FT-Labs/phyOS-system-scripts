@@ -25,7 +25,7 @@ calc_scale() {
         te $sel
         x_scale=$(bc -l <<< "($sel/$x_res)")
         if [ $sel = "2560" ]; then
-            y_scale=$(bc -l <<< "(2560/$y_res)")
+            y_scale=$(bc -l <<< "(1440/$y_res)")
         else
             y_scale=$(bc -l <<< "(1080/$y_res)")
         fi

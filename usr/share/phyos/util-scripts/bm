@@ -1,10 +1,16 @@
 #!/bin/bash
 
 if [[ $1 = "add" ]]; then
-	cd $2
-	dir=$(pwd)
-	cfg="$ZSHCFG/bookmarks/$3"
-	ln -sf "$dir" $cfg && echo "Bookmark: $3 saved succesfully"
+    if [[ -z $3 ]]; then
+        cfg="$ZSHCFG/bookmarks/$2"
+        dir=$(pwd)
+        ln -sf "$dir" $cfg && echo "Bookmark: $2 saved succesfully"
+    else
+        cd $2
+        dir=$(pwd)
+        cfg="$ZSHCFG/bookmarks/$3"
+        ln -sf "$dir" $cfg && echo "Bookmark: $3 saved succesfully"
+    fi
 elif [[ $1 = "rm" ]]; then
 	rm "$ZSHCFG/bookmarks/$2"
 	echo "Bookmark: $2 erased succesfully"

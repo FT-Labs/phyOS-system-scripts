@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-# Available Styles
-# >> Created and tested on : rofi 1.6.0-1
-#
-# column_circle     column_square     column_rounded     column_alt
-# card_circle     card_square     card_rounded     card_alt
-# dock_circle     dock_square     dock_rounded     dock_alt
-# drop_circle     drop_square     drop_rounded     drop_alt
-# full_circle     full_square     full_rounded     full_alt
-# row_circle      row_square      row_rounded      row_alt
-
 
 restart_dwm() {
     cur=$(xprop -root _NET_CURRENT_DESKTOP | awk '{print log($3)/log(2)+1}')
@@ -19,41 +9,91 @@ restart_dwm() {
 
 [[ $1 = "restart" ]] && restart_dwm && exit
 
-theme="card_alt"
+[[ -f "$HOME/.config/phyos/phyos.conf" ]] && source "$HOME/.config/phyos/phyos.conf"
+
 dir="$pOS_CONFIG_DIR/rofi/powermenu"
-pOS-powermenutitle &
+theme="default"
 
-# random colors
-styles=($(ls -p --hide="colors.rasi" $dir/styles))
-color="${styles[$(( 3 ))]}"
-
-# comment this line to disable random colors
-# sed -i -e "s/@import .*/@import \"$color\"/g" $dir/styles/colors.rasi
-
-# comment these lines to disable random style
-#themes=($(ls -p --hide="powermenu.sh" --hide="styles" --hide="confirm.rasi" --hide="message.rasi" $dir))
-#theme="${themes[$(( $RANDOM % 24 ))]}"
+[[ ! -z $POWERMENU_TYPE ]] && \
+[[ ! -z $POWERMENU_THEME ]] && \
+dir="$dir/$POWERMENU_TYPE" && \
+theme="$POWERMENU_THEME"
+lastlogin="`last $USER | head -n1 | tr -s ' ' | cut -d' ' -f5,6,7`"
 
 uptime=$(uptime -p | sed -e 's/up //g')
+host=$(hostnamectl --static)
+
+case "${POWERMENU_TYPE: -1}" in
+    1) rofi_p="Uptime: $uptime"
+    rofi_m="Uptime: $uptime" ;;
+    2) rofi_p="Goodbye ${USER}"
+    rofi_m="Uptime: $uptime" ;;
+    3) rofi_p="$USER@$host"
+    rofi_m="Last Login: $lastlogin |    Uptime: $uptime" ;;
+    4) rofi_p="$USER@$host"
+    rofi_m="  Uptime: $uptime" ;;
+esac
+
+pOS-powermenutitle &
 
 rofi_command="rofi -theme $dir/$theme"
-
 # Options
 shutdown=""
 reboot="ﰇ"
 lock=""
 logout="﫼"
 renew_dwm=""
+yes=''
+no=''
 
 case "$(readlink -f /sbin/init)" in
 	*systemd*) ctl='systemctl' ;;
 	*) ctl='loginctl' ;;
 esac
 
+rofi_cmd() {
+	rofi -dmenu \
+		-p "$rofi_p" \
+		-mesg "$rofi_m" \
+		-select $shutdown \
+		-theme ${dir}/${theme}.rasi
+}
+
+confirm_cmd() {
+    th="${dir}/confirm.rasi"
+    if [[ -f $th ]]; then
+        rofi -dmenu -p 'Confirmation' -mesg 'Are you Sure?' -select $yes -theme $th
+    else
+        th="${dir}/${theme}.rasi"
+        rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 350px;}' \
+            -theme-str 'mainbox {orientation: vertical; children: [ "message", "listview" ];}' \
+            -theme-str 'listview {columns: 2; lines: 1;}' \
+            -theme-str 'element-text {horizontal-align: 0.5;}' \
+            -theme-str 'textbox {horizontal-align: 0.5;}' \
+            -dmenu \
+            -p 'Confirmation' \
+            -mesg 'Are you Sure?' \
+            -select $yes \
+            -theme $th
+    fi
+}
+
+# Ask for confirmation
+confirm_exit() {
+    sel=$(echo -e "$yes\n$no" | confirm_cmd)
+    [[ -z $sel ]] || [[ $sel == "$no" ]] && exit
+}
+
 # Variable passed to rofi
 options="$logout\n$lock\n$shutdown\n$reboot\n$renew_dwm"
 
-chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
+confirm_exit
+
+if [[ $theme = "default" ]]; then
+    chosen="$(echo -e "$options" | $rofi_command -p "Uptime: $uptime" -dmenu -selected-row 2)"
+else
+    chosen="$(echo -e "$options" | rofi_cmd)"
+fi
 xset r rate 250 40
 killall -9 pOS-powermenutitle && dunstctl close-all
 case $chosen in
@@ -66,8 +106,10 @@ case $chosen in
             betterlockscreen -l &
         fi ;;
     $shutdown)
+        confirm_exit
 		$ctl poweroff -i ;;
     $reboot)
+        confirm_exit
 		$ctl reboot -i ;;
 	$renew_dwm)
         restart_dwm ;;
