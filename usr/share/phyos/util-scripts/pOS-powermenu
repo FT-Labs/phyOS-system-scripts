@@ -105,6 +105,15 @@ case $chosen in
         fi ;;
     $shutdown)
         confirm_exit
+        cd "$HOME/Desktop/Codes/Logs"
+        git pull --rebase
+        d=$(date +%-d.%-m.%Y)
+        mkdir $d; cd $d
+        history -E | grep $d >> ./hist.txt
+        cat /tmp/file-changes.txt >> ./file-changes.txt
+        git add -A
+        git commit -m "$d"
+        git push
 		$ctl poweroff -i ;;
     $reboot)
         confirm_exit
