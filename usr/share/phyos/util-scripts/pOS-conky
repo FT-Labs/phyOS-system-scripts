@@ -1,7 +1,9 @@
 #!/bin/bash
 
 killall conky
+source "$HOME/.config/phyos/phyos.conf"
+[[ -z $CONKY_WIDGETS ]] && exit
 sleep 2s
 
-conky -c $HOME/.config/conky/Auva/Auva.conf &> /dev/null &
-conky -c $HOME/.config/conky/Auva/Auva2.conf &> /dev/null &
+path="$HOME/.config/conky/$CONKY_WIDGETS"
+ls $path | grep conf | xargs -I % conky -c "$path/%" &> /dev/null &
