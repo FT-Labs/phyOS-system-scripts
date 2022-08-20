@@ -9,9 +9,9 @@ do
     then
         key=$(echo $line | sed "s/[^0-9]*//g")
 
-        if ([ $key = "43" ] || [ $key = "113" ] || [ $key = "44" ]); then
+        if ([ $key = "43" ] || [ $key = "113" ] || [ $key = "111" ] || [ $key = "44" ]); then
             i=$((i-1))
-        elif([ $key = "46" ] || [ $key = "114" ] || [ $key = "45" ]); then
+        elif([ $key = "46" ] || [ $key = "114" ] || [ $key = "116" ] || [ $key = "45" ]); then
             i=$((i+1))
         fi
 
