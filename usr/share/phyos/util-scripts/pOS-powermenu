@@ -15,9 +15,9 @@ dir="$pOS_CONFIG_DIR/rofi/powermenu"
 theme="default"
 
 [[ ! -z $POWERMENU_TYPE ]] && \
-[[ ! -z $POWERMENU_THEME ]] && \
+[[ ! -z $POWERMENU_STYLE ]] && \
 dir="$dir/$POWERMENU_TYPE" && \
-theme="$POWERMENU_THEME"
+theme="$POWERMENU_STYLE"
 lastlogin="`last $USER | head -n1 | tr -s ' ' | cut -d' ' -f5,6,7`"
 
 uptime=$(uptime -p | sed -e 's/up //g')
