@@ -15,6 +15,7 @@ dir="$pOS_CONFIG_DIR/rofi/powermenu"
 theme="default"
 
 [[ ! -z $POWERMENU_TYPE ]] && \
+[[ $POWERMENU_TYPE != "Default" ]] && \
 [[ ! -z $POWERMENU_STYLE ]] && \
 dir="$dir/$POWERMENU_TYPE" && \
 theme="$POWERMENU_STYLE"
