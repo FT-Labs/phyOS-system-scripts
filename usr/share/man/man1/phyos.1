@@ -5,71 +5,124 @@ phyOS \- Usage Guide and Scripts
 .B phyOS
 .SH DESCRIPTION
 Useful scripts & system wide settings guide
-.P
-.SS CUSTOMIZATION SCRIPTS
+.SH CUSTOMIZATION SCRIPTS
 .TP
+.nf
 .B bm - bookmark script
+.RS
 Bookmark directories & navigate through them either from terminal or Win+d button combination
-    bm add $dir @Aliasname
-        E.g: bm add ./Desktop @Desktop will add a bookmark as @Desktop.
-        Usage: jmp @Desktop from terminal, or Win+d then choose from rofi.
-    bm rm @Aliasname [Removes bookmark]
-    bm clear [Removes all bookmarks]
+.RS
+\fBbm add\fP $dir @Aliasname
+.RS
+E.g: bm add ./Desktop @Desktop will add a bookmark as @Desktop.
+Usage: jmp @Desktop from terminal, or Win+d then choose from rofi.
+.RE
+.RE
+.RS
+\fBbm rm\fP @Aliasname [Removes bookmark]
+\fBbm clear\fP [Removes all bookmarks]
+.RE
+.RE
 .TP
+.nf
 .B pOS-setbg
-pOS-setbg ${img_path}
-Set wallpaper according to ${img_path}, also update lock screen. If ${img_path} is not valid or empty, sets default wallpaper.
+.RS
+\fBpOS-setbg\fP ${img_path}
+.RS
+Set wallpaper according to ${img_path}, also update lock screen.
+If ${img_path} is not valid or empty, sets default wallpaper.
+.RE
+.RE
 .TP
 .B pOS-make-bar
+.RS
 Make your own status bar
-Write space seperated integers from available blocks [e.g: 0 1 3 2] to customize your status bar blocks.
+.RS
+Make statusbar via script, use vim keys or arrows to navigate
+Hit enter to select a block, enter ---STOP--- to continue
+Note that blocks will be ordered according to your selection order
+.RE
+.RE
 .TP
 .B pOS-pin
 Set application preferences
-This script helps you to select preferences for applications. For example open discord on tag 9, force thunar in center of screen.
-    tagmask: Spawn window on chosen tag (1 - 9)
-    isfloating: Sets window to floating mode
-    isterminal: Open application in terminal (use this for tui applications)
-    iscentered: Forces window to center of screen (useful for dialog boxes, forces floating mode)
-    noswallow: Dont swallow window
-    managedsize: Allow dwm to change windows size (use this if floating mode window is small)
+.RS
+For example open discord on tag 9, force thunar in center of screen.
+.RS
+tagmask: Spawn window on chosen tag (1 - 9)
+isfloating: Sets window to floating mode
+isterminal: Open application in terminal (use this for tui applications)
+iscentered: Forces window to center of screen (useful for dialog boxes, forces floating mode)
+noswallow: Dont swallow window
+managedsize: Allow dwm to change windows size (use this if floating mode window is small)
+.RE
+.RE
 .TP
 .B pOS-sddm-choose-theme
+.RS
 Choose from available sddm themes
-
-Select a number from available sddm themes to apply. Install more themes with pacman.
-    [Available themes in phyOS-repo]
-        1 - phyOS-sddm-simplicity-theme
-        2 - phyOS-sddm-ittu-theme
+Press enter to choose from available sddm themes to apply. Install more themes with pacman.
+.RS
+[Available themes in phyOS-repo]
+.RS
+1 - phyOS-sddm-simplicity-theme
+2 - phyOS-sddm-ittu-theme
+.RE
+.RE
+.RE
 .TP
 .B pOS-grub-choose-theme
+.RS
 Choose from available grub themes
-
-Select a number from available grub themes to apply. Install more themes with pacman.
-    [Available themes in phyOS-repo]
-        1 - phyOS-grub-xenlism-theme
-        2 - phyOS-grub-darkmatter-theme
-.SS SYSTEM SCRIPTS
+Press enter to choose from available grub themes to apply. Install more themes with pacman.
+.RS
+[Available themes in phyOS-repo]
+.RS
+1 - phyOS-grub-xenlism-theme
+2 - phyOS-grub-darkmatter-theme
+.RE
+.RE
+.RE
+.SH SYSTEM SCRIPTS
 .TP
 .B phyOS-grub-conf
-Run this script to update your grub into latest version if you have installed an older version of iso.
+.nf
+.RS
+Update grub configurations to phyOS latest
+.RE
 .TP
 .B phyOS-update-kernel-conf
-Run this script to update your kernel & initramfs configuration if you have installed an older version of iso.
- If you have issues on boot, this will add a new kernel which early graphics (KMS) are disabled.
+.RS
+Run this script to update your kernel & initramfs configuration
+If you have issues on boot, this will add a new kernel which early graphics (KMS) are disabled.
+.RE
 .TP
 .B phyOS-update-mirrors
+.nf
+.RS
 Run this script to update your mirrors to faster ones.
+.RE
 .TP
-.B phyup - Update dotfiles & dwm script
-    phyup dots --force
-        Force update dotfiles to newest update. (This will override your custom changes)
-    phyup dots
-        Update dotfiles to newest update, if there is no conflict this won't touch custom changes on dotfiles.
-    phyup dwm
-        Compile & build phyOS-dwm package locally.
-        If you want to set custom keybindings, copy "$HOME/.config/phyos/dwm/keys.h.backup" to "$HOME/.config/phyos/dwm/keys.h".
-        Then make your changes on "keys.h" file. After that, run this script to update your keybindings.
+.nf
+\fBphyup\fP - Update dotfiles & dwm script
+.RS
+.B phyup dots --force
+.RS
+Force update dotfiles to newest update. (This will override your custom changes)
+.RE
+.B phyup dots
+.RS
+Update dotfiles to newest update
+If there is no conflict this won't touch custom changes on dotfiles.
+.RE
+.B phyup dwm
+.RS
+Compile & build phyOS-dwm package locally.
+TO SET CUSTOM KEYBINDINGS:
+Copy "$HOME/.config/phyos/dwm/keys.h.backup" to "$HOME/.config/phyos/dwm/keys.h"
+Then make your changes on "keys.h" file.
+After changing "keys.h", run this script to update your keybindings.
+.RE
 .SH SEE ALSO
 .BR dwm (1)
 .SH MISSING/BUGS
