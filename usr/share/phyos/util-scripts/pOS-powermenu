@@ -61,6 +61,7 @@ rofi_cmd() {
 }
 
 confirm_cmd() {
+    [[ $POWERMENU_CONFIRM != "true" ]] && return
     th="${dir}/confirm.rasi"
     if [[ -f $th ]]; then
         rofi -dmenu -p 'Confirmation' -mesg 'Are you Sure?' -select $yes -theme $th
