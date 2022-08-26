@@ -11,6 +11,6 @@ echo "Please choose a number:"
 echo
 tput setaf 46
 c=$(printf "%s\n" "${vals[@]}" | gum choose | tr "\n" " ")
-[[ -z $c ]] && exit
+[[ -z $c ]] && exit 1
 
 echo -e "[Theme]\nCurrent=${c::-1}" | sudo tee /etc/sddm.conf && echo "Sddm theme: ${c::-1} changed succesfully."

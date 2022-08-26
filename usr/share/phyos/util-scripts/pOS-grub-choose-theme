@@ -10,5 +10,5 @@ tput setaf 63
 echo
 tput setaf 46
 c=$(printf "%s\n" "${vals[@]}" | gum choose | tr "\n" " ")
-[[ -z $c ]] && exit
+[[ -z $c ]] && exit 1
 sudo sed -i '/GRUB_THEME/d' /etc/default/grub; echo -e "GRUB_THEME=/boot/grub/themes/${c::-1}/theme.txt" | sudo tee -a /etc/default/grub && sudo grub-mkconfig -o /boot/grub/grub.cfg && echo "GRUB theme: ${c::-1} changed succesfully."
