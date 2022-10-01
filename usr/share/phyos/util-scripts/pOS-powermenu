@@ -3,7 +3,8 @@
 
 restart_dwm() {
     cur=$(xprop -root _NET_CURRENT_DESKTOP | awk '{print log($3)/log(2)+1}')
-    kill -HUP $(pidof -s dwm) && xdotool key Super_L
+    [[ $(pidof -s dwm) ]] && kill -HUP $(pidof -s dwm) && xdotool key Super_L
+    [[ $(pidof -s pdwm) ]] && kill -HUP $(pidof -s pdwm) && xdotool key Super_L
     (sleep 0.1 && xdotool key "Super_L+$cur")
 }
 
