@@ -101,7 +101,7 @@ killall -9 pOS-powermenutitle && dunstctl close-all
 case $chosen in
     $logout)
         [[ $(pidof -s dwm) ]] && kill -TERM $(pidof -s dwm)
-        [[ $(pidof -s pdwm) ]] && kill -TERM $(pidof -s pdwm)
+        [[ $(pidof -s pdwm) ]] && kill -TERM $(pidof -s pdwm) ;;
     $lock)
         if pacman -Qq "lightdm" > /dev/null ; then
             dm-tool lock &
