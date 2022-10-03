@@ -3,9 +3,9 @@
 if [[ $COMPOSITOR = "picom" ]]; then
     [[ -f "$HOME/.config/phyos/phyos.conf" ]] && source "$HOME/.config/phyos/phyos.conf"
     if [[ $PICOM_EXPERIMENTAL = "true" ]]; then
-        $COMPOSITOR --experimental-backends --backend glx
+        $COMPOSITOR --backend glx
     else
-        $COMPOSITOR
+        $COMPOSITOR --legacy-backends --backend xrender
     fi
 else
     $COMPOSITOR
