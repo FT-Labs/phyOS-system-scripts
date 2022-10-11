@@ -1,4 +1,4 @@
-.TH phyOS 1 phyOS\-1.1.0\-beta
+.TH phyOS 1 phyOS\-1.2.0\-beta
 .SH NAME
 phyOS \- Usage Guide and Scripts
 .SH SYNOPSIS
@@ -41,20 +41,6 @@ Make your own status bar
 Make statusbar via script, use vim keys or arrows to navigate
 Hit enter to select a block, enter ---STOP--- to finish selection
 Note that blocks will be ordered according to your selection order
-.RE
-.RE
-.TP
-.B pOS-pin
-Set application preferences
-.RS
-For example open discord on tag 9, force thunar in center of screen.
-.RS
-tagmask: Spawn window on chosen tag (1 - 9)
-isfloating: Sets window to floating mode
-isterminal: Open application in terminal (use this for tui applications)
-iscentered: Forces window to center of screen (useful for dialog boxes, forces floating mode)
-noswallow: Dont swallow window
-managedsize: Allow dwm to change windows size (use this if floating mode window is small)
 .RE
 .RE
 .TP
@@ -115,13 +101,17 @@ Force update dotfiles to newest update. (This will override your custom changes)
 Update dotfiles to newest update
 If there is no conflict this won't touch custom changes on dotfiles.
 .RE
-.B phyup dwm
+.B phyup dwm (phyOS-dwm, old window manager)
 .RS
 Compile & build phyOS-dwm package locally.
 TO SET CUSTOM KEYBINDINGS:
 Copy "$HOME/.config/phyos/dwm/keys.h.backup" to "$HOME/.config/phyos/dwm/keys.h"
 Then make your changes on "keys.h" file.
 After changing "keys.h", run this script to update your keybindings.
+.RE
+.B pdwmc (pdwm control center)
+.RS
+Change attributes (colors, keys, buttons, app settings) for pdwm. \fBpdwmc --help\fP for available options.
 .RE
 .SH SEE ALSO
 .BR dwm (1)
