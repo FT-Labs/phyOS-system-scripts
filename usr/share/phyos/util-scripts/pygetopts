@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+
+
+from argparse import *
+import sys
+
+def calci(s):
+    return str(int(eval(s)))
+
+def calcf(s):
+    return str(eval(s))
+
+specials = {
+    "calci" : calci,
+    "calcf" : calcf
+}
+
+class ArgB:
+    def __init__(self, line):
+        if "=" in line:
+            self.getopts(line)
+        else:
+            self.getspecial(line)
+
+    def getopts(self, line):
+        args = line.strip("\n").split("=")
+        self.short = f'-{args[0][0]}'
+        self.long = f'--{args[0]}'
+        self.type = None
+        self.action = None
+        self.help = None
+        self.choices = None
+        self.nargs = 1
+        for i in range(1, len(args), 2):
+            if i + 1 < len(args):
+                if args[i] == "type":
+                    if args[i + 1] == "int":
+                        self.type = int
+                    elif args[i + 1] == "str":
+                        self.type = str
+                elif args[i] == "action":
+                    self.action = args[i + 1]
+                elif args[i] == "help":
+                    self.help = args[i + 1]
+                elif args[i] == "nargs":
+                    self.nargs = int(args[i + 1])
+                elif args[i] == "choices":
+                    self.choices = args[i + 1].split(",")
+
+    def getspecial(self, line):
+        line = line.strip("\n")
+        if line == "calci":
+            self.short = None
+            self.long = f'--calci'
+            self.type = str
+            self.help = "Calculate integer simple math equation"
+        elif line == "calcf":
+            self.short = None
+            self.long = f'--calcf'
+            self.type = str
+            self.help = "Calculate float simple math equation"
+
+    def parseopts(self, parser):
+        if self.short == None:
+            parser.add_argument(arg.long, type=arg.type, help=arg.help)
+        elif self.action != None:
+            parser.add_argument(arg.short, arg.long, action=arg.action, help=arg.help)
+        else:
+            parser.add_argument(arg.short, arg.long, action=arg.action, type=arg.type, choices=arg.choices, nargs=arg.nargs, help=arg.help)
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+
+    for line in sys.stdin:
+        if line != "\n":
+            arg = ArgB(line)
+            arg.parseopts(parser)
+        else:
+            break
+    args = parser.parse_args()
+
+    d = vars(args)
+
+    out = ""
+    for key, value in d.items():
+        if key in specials and value != None:
+            out += f'{key}="{specials[key](value)}"\n'
+        elif value != None and value:
+            if isinstance(value, list):
+                out += f'{key}="{" ".join(value)}"\n'
+            else:
+                out += f'{key}="{value}"\n'
+        else:
+            out += f'{key}=\n'
+
+    print(out)
