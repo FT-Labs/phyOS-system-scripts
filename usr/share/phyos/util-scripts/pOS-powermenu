@@ -58,7 +58,7 @@ rofi_cmd() {
 		-p "$rofi_p" \
 		-mesg "$rofi_m" \
 		-select $shutdown \
-		-theme ${dir}/${theme}.rasi
+		-theme ${dir}/${theme}.rasi \
 }
 
 confirm_cmd() {
