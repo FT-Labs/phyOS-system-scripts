@@ -29,6 +29,7 @@ killrecording() {
 }
 
 screencast() {
+    [ $2 = "Yes" ] && sound="-f alsa -i default"
     frame_rate=$(printf '15\n30\n60' | rofi $opts -dmenu -p 'Please choose refresh rate:')
     te $frame_rate
     name="screencast-$(date '+%y%m%d-%H%M-%S')"
@@ -37,8 +38,8 @@ screencast() {
 	-video_size "$1" \
 	-framerate "$frame_rate" \
 	-f x11grab \
-	-i "$DISPLAY${2}" \
-	-f alsa -i default \
+	-i "$DISPLAY${3}" \
+	$sound \
  	-c:v libx264rgb -crf 0 -preset ultrafast -color_range 2 \
 	"$HOME/Videos/$name.mkv" &
     echo $! > /tmp/recording
@@ -49,29 +50,30 @@ screencast() {
     killrecording
 
 
-chosen=$(printf '麗  Choose Recording Area\n󰍹  Choose Display\n󰍺  Record All' | rofi $opts -dmenu -p 'Recording Options:')
+chosen=$(printf '󰍹  Choose Display\n麗  Choose Recording Area\n󰍺  Record All' | rofi $opts -dmenu -p 'Recording Options:')
 
 case $chosen in
     "󰍹  Choose Display")
-        allposs=$(xrandr -q | grep "connected")
-        screens=$(echo "$allposs" | awk '/ connected/ {print $1}')
-        chosen=$(echo $screens | rofi $opts -dmenu -p 'Which monitor?')
-
-        val=$(xrandr -q | grep --max-count=2 -P "$chosen|\*\+")
-        is_primary=$(echo "$val" | grep primary)
-        res=$(echo "$val" | awk '/\*\+/ {print $1}')
-        te $res
-
-        [ ! -z "$is_primary" ] && \
-            screencast "$res"
+        allposs=$(xrandr -q | grep "connected" | sed 's/primary//g')
+        declare -A screens
+        eval `echo "$allposs" | awk -vOFS='=' '/ connected/ {print "screens["$1"]",$3}'`
+        chosen=$(echo ${!screens[@]} | tr ' ' '\n' | rofi $opts -dmenu -p 'Which monitor?')
+        res=$(echo "${screens[$chosen]}" | cut -d '+' -f 1)
+        offset="+$(echo "${screens[$chosen]}" | cut -d '+' -f 2- --output-delimiter=',')"
+        sound=$(printf 'Yes\nNo' | rofi -dmenu -p 'Record sound?')
+        screencast "$res" "$sound" "$offset"
         ;;
     "麗  Choose Recording Area")
         resall=$(slop)
         res=$(echo $resall | cut -d '+' -f 1)
         offset="+$(echo $resall | cut -d '+' -f 2- --output-delimiter=',')"
-        screencast "$res" "$offset"
+        sound=$(printf 'Yes\nNo' | rofi -dmenu -p 'Record sound?')
+        screencast "$res" "$sound" "$offset"
         ;;
     "󰍺  Record All")
+        arg=$(xrandr -q | grep -oE 'current.*' | awk -vOFS='' '{print $2,$3,$4}')
+        sound=$(printf 'Yes\nNo' | rofi -dmenu -p 'Record sound?')
+        screencast "${arg::-1}" "$sound"
         ;;
 esac
 
