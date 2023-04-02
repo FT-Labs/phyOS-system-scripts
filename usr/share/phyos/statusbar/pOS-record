@@ -34,16 +34,30 @@ screencast() {
     te $frame_rate
     name="screencast-$(date '+%y%m%d-%H%M-%S')"
     name=$(echo $name | rofi $opts -dmenu -p "Rename file? (Enter for default)")
-	ffmpeg -y \
-	-video_size "$1" \
-	-framerate "$frame_rate" \
-	-f x11grab \
-	-i "$DISPLAY${3}" \
-	$sound \
- 	-c:v libx264rgb -crf 0 -preset ultrafast -color_range 2 \
-	"$HOME/Videos/$name.mkv" &
-    echo $! > /tmp/recording
-    updateicon "󰻃"
+	if [ $(lsmod | grep nvidia) ]; then
+			ffmpeg -y \
+			-video_size "$1" \
+			-framerate "$frame_rate" \
+			-f x11grab \
+			-hwaccel cuda \
+			-i "$DISPLAY${3}" \
+			$sound \
+			-c:v h264_nvenc -preset slow \
+			"$HOME/Videos/$name.mkv" &
+			echo $! > /tmp/recording
+			updateicon "󰻃"
+	else
+		ffmpeg -y \
+		-video_size "$1" \
+		-framerate "$frame_rate" \
+		-f x11grab \
+		-i "$DISPLAY${3}" \
+		$sound \
+		-c:v libx264rgb -crf 0 -preset ultrafast -color_range 2 \
+		"$HOME/Videos/$name.mkv" &
+		echo $! > /tmp/recording
+		updateicon "󰻃"
+	fi
 }
 
 [ -f /tmp/recording ] && \
