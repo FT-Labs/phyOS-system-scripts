@@ -11,3 +11,4 @@ COMPOSITOR=picom
 QT_QPA_PLATFORMTHEME=qt5ct
 PATH="/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin/:/usr/share/phyos/statusbar:/usr/share/phyos/util-scripts"
 _JAVA_AWT_WM_NONREPARENTING=1
+SUDO_ASKPASS="/usr/share/phyos/util-scripts/pOS-askpass"

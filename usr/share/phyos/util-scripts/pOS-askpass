@@ -1,0 +1,9 @@
+#!/bin/sh
+
+dbus-launch rofi -dmenu\
+	-p "Password:"\
+	-password\
+	-i\
+	-no-fixed-num-lines\
+	-no-show-icons\
+	-theme "${pOS_CONFIG_DIR}/rofi/askpass/default.rasi"
