@@ -29,7 +29,7 @@ killrecording() {
 }
 
 screencast() {
-    [ $2 = "Yes" ] && sound="-f alsa -i default"
+    [ $2 = "Yes" ] && sound="-f alsa -i default" || sound=""
     frame_rate=$(printf '15\n30\n60' | rofi $opts -dmenu -p 'Please choose refresh rate:')
     te $frame_rate
     name="screencast-$(date '+%y%m%d-%H%M-%S')"
