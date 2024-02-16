@@ -13,7 +13,7 @@ if [ -f "$1" ]; then
     ln -sf "$(readlink -f "$1")" "$bgloc"
 fi
 
-if [ ! -e "$bgloc" ] && [ -f "/usr/share/wallpapers/wp.*" ]; then
+if [ ! -e "$bgloc" ]; then
 	bgloc="$(ls /usr/share/wallpapers/wp.*)"
 fi
 
