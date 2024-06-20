@@ -1,10 +1,12 @@
 #!/bin/sh
 
-id=$(xinput list | grep Touchpad | awk '{ print $6}' | cut -d '=' -f 2)
+eval `xinput list | grep -oP 'Touchpad\K.*id=\d*'`
 
-state=$(xinput list-props $id | grep "Device Enabled" | awk ' {print $4} ')
+state=$(xinput list-props $id | grep "Device Enabled" | awk '{print $NF}')
 
-if [ $state = 1 ]; then
+[ ! -n "${id}" ] && exit 1
+
+if [ "${state}" -eq '1' ]; then
 	dunstify -r 19 -a center --timeout=1500 -i "$pOS_NOTIF_IMG_DIR/touchpad-disabled.png" ""
 	xinput set-prop $id "Device Enabled" 0
 else
